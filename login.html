@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — HP CARE Authorised Service Desk</title>
+  <link rel="stylesheet" href="assets/hp.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+</head>
+<body class="login-body">
+
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo-wrap">
+        <img src="assets/hp-logo.png" alt="HP Logo" class="login-logo" />
+      </div>
+      <h2 style="margin:0 0 4px; font-size:1.35rem; color:var(--slate-900);">HP CARE SERVICE DESK</h2>
+      <p style="margin:0; font-size:0.85rem; color:var(--slate-500);">HOME COMFORTS · 89 ZONE 2 M.P. NAGAR BHOPAL</p>
+    </div>
+
+    <form id="loginForm" class="login-form">
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" required autocomplete="username" />
+      </div>
+
+      <div class="form-group" style="margin-bottom:1.25rem;">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password" required autocomplete="current-password" />
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:0.95rem;">Sign In to Service Desk</button>
+    </form>
+  </div>
+
+  <div class="toast no-print" id="toast"></div>
+
+  <script src="assets/hp.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      HPCare.init("login");
+    });
+  </script>
+</body>
+</html>

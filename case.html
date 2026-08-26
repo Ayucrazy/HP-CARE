@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Service Case &amp; Quotation | HP CARE Bhopal</title>
+<meta name="description" content="HP Care Service Desk — unified service case and official quotation performa invoice form" />
+<link rel="stylesheet" href="assets/hp.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar no-print">
+    <a class="brand" href="index.html">
+      <div class="hp-logo-wrap">
+        <img src="assets/hp-logo.png" alt="HP Logo" />
+      </div>
+      <div class="name">HP CARE<small>HOME COMFORTS · 89 ZONE 2 M.P. NAGAR BHOPAL</small></div>
+    </a>
+    <nav class="nav">
+      <a href="index.html">📊 Dashboard</a>
+      <a href="case.html?type=Under%20Warranty" class="active">➕ New Case / Quote</a>
+      <div class="user-badge">
+        <span class="status-dot"></span>
+        <span>Danish / Ayush</span>
+      </div>
+      <a href="#" id="btnLogout">Logout</a>
+    </nav>
+  </header>
+
+  <main class="content no-print">
+    <div class="container">
+      <div class="page-title">
+        <div>
+          <h1 id="pageTitle">Service Case &amp; Quotation Form</h1>
+          <p id="pageSubtitle">HP CARE (HOME COMFORTS) · 89 Zone 2 M.P. Nagar Bhopal-462011 · GST: 23ABCPA4215G1ZJ · Ph: 8962194727</p>
+        </div>
+        <div class="actions-header">
+          <button type="button" class="btn btn-primary" id="btnSaveAndPrint" style="background:#0F172A; border-color:#0F172A; font-weight:700;">💾🖨️ Save &amp; Print</button>
+          <button type="button" class="btn btn-primary" id="btnPrintQuote">📑 Print Official Quotation / Performa Invoice</button>
+          <button type="button" id="btnPrintJob" class="btn btn-outline">🖨️ Print CSO Service Report</button>
+        </div>
+      </div>
+
+      <!-- Workflow timeline -->
+      <div class="panel no-print">
+        <div class="panel-head">Case Status Timeline</div>
+        <div class="panel-body">
+          <ul class="workflow" id="workflow"></ul>
+        </div>
+      </div>
+
+      <form id="caseForm" autocomplete="off">
+
+        <!-- Section: Case & Quotation Tracking -->
+        <div class="panel">
+          <div class="panel-head">Case &amp; Quotation Identification</div>
+          <div class="panel-body">
+            <div class="form-grid cols-4">
+              <div class="field code-field"><label>Quotation / Case No.</label><input type="text" id="caseNo" readonly /></div>
+              <div class="field"><label>Workflow Status</label><select id="status"></select></div>
+              <div class="field"><label>Priority Level</label><select id="priority"><option value="Low">Low</option><option value="Medium" selected>Medium</option><option value="High">High</option><option value="Urgent">Urgent</option></select></div>
+              <div class="field"><label>Case Type / Obligation <span class="req">*</span></label>
+                <select id="caseType">
+                  <option value="Under Warranty">Under Warranty (UW)</option>
+                  <option value="Out of Warranty">Out of Warranty (OOW)</option>
+                  <option value="Quotation">Quotation / Performa Invoice</option>
+                  <option value="CarePAQ AMC">CarePAQ AMC</option>
+                </select>
+              </div>
+              <div class="field"><label>Assigned Engineer</label><input type="text" id="engineer" value="Danish" /></div>
+              <div class="field"><label>Service Partner &amp; Center</label><input type="text" id="center" value="HP CARE (HOME COMFORTS) · 89 Zone 2 M.P. Nagar" /></div>
+              <div class="field"><label>Receiving / Date Opened</label><input type="text" id="dateOpened" /></div>
+              <div class="field"><label>Last Updated</label><input type="text" id="lastUpdated" readonly /></div>
+              <div class="field"><label>Actual Completion</label><input type="date" id="actualDate" /></div>
+              <div class="field"><label>Escalation Required</label><select id="escalation"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 1: Customer Information -->
+        <div class="panel">
+          <div class="panel-head">Customer Information</div>
+          <div class="panel-body">
+            <div class="form-grid cols-3">
+              <div class="field"><label>Customer Name / Contact Person <span class="req">*</span></label><input type="text" id="customerName" placeholder="e.g. AKSHAT / ROHIT GUPTA" required /></div>
+              <div class="field"><label>Customer Contact <span class="req">*</span></label><input type="tel" id="mobile" placeholder="e.g. 8319356834" required /></div>
+              <div class="field"><label>Alternate Contact</label><input type="tel" id="altContact" placeholder="e.g. 8962194727" /></div>
+              <div class="field"><label>Customer Mail ID</label><input type="email" id="email" placeholder="e.g. customer@example.com" /></div>
+              <div class="field"><label>Company Name</label><input type="text" id="company" placeholder="e.g. AKSHAT" /></div>
+              <div class="field code-field"><label>Customer GST Number (Optional)</label><input type="text" id="custGstNo" placeholder="e.g. 23XXXXX0000X1ZX" /></div>
+              <div class="field"><label>City</label><input type="text" id="city" value="BHOPAL" /></div>
+              <div class="field"><label>State</label><input type="text" id="state" value="Madhya Pradesh" /></div>
+              <div class="field"><label>PIN Code</label><input type="text" id="pincode" value="462011" /></div>
+              <div class="field span-3"><label>Customer Address</label><textarea id="address" rows="2" placeholder="e.g. BHOPAL ( M.P )"></textarea></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Product Information -->
+        <div class="panel">
+          <div class="panel-head">Product Information &amp; Warranty Details</div>
+          <div class="panel-body">
+            <div class="form-grid cols-4">
+              <div class="field span-2"><label>Product Name / Model Number <span class="req">*</span></label><input type="text" id="model" placeholder="e.g. 14-GR0002TU/8H1C2PA or 15S-FQ5185TU" required /></div>
+              <div class="field code-field"><label>Part No. / Product ID <span class="req">*</span></label><input type="text" id="productId" placeholder="e.g. 8H1C2PA / 7Q6Z7PA" required /></div>
+              <div class="field code-field"><label>Serial No. (S/N) <span class="req">*</span></label><input type="text" id="serial" placeholder="e.g. 5CG5125159 / 5CD3333C1Z" required /></div>
+              
+              <!-- Purchase Date with dynamic Compulsory * indicator -->
+              <div class="field" id="purchaseDateFieldWrapper">
+                <label id="purchaseDateLabel" for="purchaseDate">
+                  Purchase / Invoice Date <span class="req" id="purchaseDateReq">*</span>
+                  <span class="hint-note" id="purchaseDateHint">(Compulsory for Under Warranty)</span>
+                </label>
+                <input type="text" id="purchaseDate" placeholder="e.g. 25-Dec-25" />
+              </div>
+
+              <div class="field code-field"><label>Device Password / PIN</label><input type="text" id="password" placeholder="e.g. 20506" /></div>
+              <div class="field"><label>Operating System (OS)</label><input type="text" id="os" value="WINDOWS 11" /></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Service Information -->
+        <div class="panel">
+          <div class="panel-head">Service Information &amp; Description</div>
+          <div class="panel-body">
+            <div class="form-grid cols-2">
+              <div class="field"><label>Complaint / Description <span class="req">*</span> <small style="color:var(--hp-blue); font-weight:normal;">(Suggestions available on typing)</small></label><input type="text" id="complaint" list="commonComplaintsList" placeholder="e.g. NO DISPLAY, Cleaning & Pasting, SSD Upgrade..." required style="font-weight:600;" /></div>
+              <div class="field"><label>Engineer Remarks / Diagnosis</label><textarea id="custRemarks" rows="2" placeholder="e.g. Liquid ingress near DIMM slot / Display replacement."></textarea></div>
+              <div class="field span-2">
+                <label style="font-weight: 700; font-size: 0.88rem; color: var(--slate-800); margin-bottom: 0.25rem;">
+                  Physical Condition Inspection (Divided into 2 Distinct Columns)
+                </label>
+                <div class="condition-split-grid">
+                  <!-- Column 1: Scratches & Cosmetic Wear -->
+                  <div class="condition-col">
+                    <div class="condition-col-header">
+                      <div class="condition-col-title">
+                        <span>🔍 Part 1: Scratches &amp; Cosmetic Condition</span>
+                      </div>
+                      <span class="badge badge-quote">Cosmetics</span>
+                    </div>
+                    <div class="condition-preset-chips" id="scratchesChips">
+                      <button type="button" class="preset-chip" data-val="No Scratches / Clean Body">✨ No Scratches</button>
+                      <button type="button" class="preset-chip active" data-val="Minor Hairline Scratches (Normal Wear)">👌 Minor Hairline Scratches</button>
+                      <button type="button" class="preset-chip" data-val="Deep Scratches on Top Casing (A-Cover)">⚠️ A-Cover Scratches</button>
+                      <button type="button" class="preset-chip" data-val="Palmrest / Keyboard Area Scratched">⌨️ Palmrest Wear</button>
+                      <button type="button" class="preset-chip" data-val="Display Screen Glass Scratched">🖥️ Screen Scratches</button>
+                      <button type="button" class="preset-chip" data-val="Base / Bottom Scuffs (D-Cover)">📋 Base Scuffs</button>
+                    </div>
+                    <div class="field" style="margin-top:0.4rem;">
+                      <label for="scratchesCondition" style="font-size:0.75rem; color:var(--slate-600);">Specific Scratches Notes:</label>
+                      <textarea id="scratchesCondition" rows="2" placeholder="e.g. Minor hairline scratches on A-cover, no deep gouges.">Minor Hairline Scratches (Normal Wear)</textarea>
+                    </div>
+                  </div>
+
+                  <!-- Column 2: Physical Damages, Breakages & Liquid Spill -->
+                  <div class="condition-col">
+                    <div class="condition-col-header">
+                      <div class="condition-col-title">
+                        <span>⚠️ Part 2: Damages, Breakages &amp; Liquid Ingress</span>
+                      </div>
+                      <span class="badge badge-oow">Structural</span>
+                    </div>
+                    <div class="condition-preset-chips" id="damagesChips">
+                      <button type="button" class="preset-chip active" data-val="No Physical Damage / Intact Body">✅ No Physical Damage</button>
+                      <button type="button" class="preset-chip" data-val="Corner Dented / Casing Chipped">💥 Corner Dent</button>
+                      <button type="button" class="preset-chip" data-val="Hinge Broken / Dislocated / Hard to Open">🔩 Hinge Broken</button>
+                      <button type="button" class="preset-chip" data-val="LCD Display Cracked / Internal Damage">🖥️ LCD Panel Cracked</button>
+                      <button type="button" class="preset-chip" data-val="Liquid Ingress / Water Spilled on Motherboard/RAM">💧 Liquid / Water Damage</button>
+                      <button type="button" class="preset-chip" data-val="Charging Port / USB Port Physically Damaged">🔌 Port Broken</button>
+                    </div>
+                    <div class="field" style="margin-top:0.4rem;">
+                      <label for="damagesCondition" style="font-size:0.75rem; color:var(--slate-600);">Specific Damages / Breakage Notes:</label>
+                      <textarea id="damagesCondition" rows="2" placeholder="e.g. No Physical Damage / Intact Body">No Physical Damage / Intact Body</textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:1.25rem;">
+              <div class="field"><label>Accessories Received</label>
+                <div class="check-grid" id="accessoriesGrid"></div>
+              </div>
+            </div>
+            <div class="form-grid cols-2" style="margin-top:1.25rem;">
+              <div class="field span-2"><label>Service Recommendations</label><textarea id="recommendations" rows="2" placeholder="Service recommendations, replacement parts required..."></textarea></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 7: Itemized Quotation & Parts Table -->
+        <div class="panel" id="quotePanel">
+          <div class="panel-head">
+            <span>Itemized Parts &amp; Quotation Calculation</span>
+            <button type="button" class="btn btn-outline btn-sm" id="btnAddPart">➕ Add Item / Spare Part</button>
+          </div>
+          <div class="panel-body">
+            <div class="table-wrap">
+              <table class="parts-table">
+                <thead>
+                  <tr>
+                    <th style="width:160px;">Part No.</th>
+                    <th>description</th>
+                    <th style="width:120px; text-align:right;">Rate (₹)</th>
+                    <th style="width:100px; text-align:right;">GST (18%)</th>
+                    <th style="width:130px; text-align:right;">Amount (₹)</th>
+                    <th style="width:40px; text-align:center;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="partsTableBody"></tbody>
+              </table>
+            </div>
+
+            <!-- Quotation Summary -->
+            <div class="parts-summary-box">
+              <div class="parts-summary">
+                <div class="row">
+                  <span>Net Rate Subtotal:</span>
+                  <span id="quoteNetTotal" style="font-family:var(--font-mono); font-weight:700;">₹0.00</span>
+                </div>
+                <div class="row">
+                  <span>Total GST (18%):</span>
+                  <span id="quoteGstTotal" style="font-family:var(--font-mono); font-weight:700;">₹0.00</span>
+                </div>
+                <div class="row total">
+                  <span>TOTAL AMOUNT:</span>
+                  <span id="quoteGrandTotal" style="font-family:var(--font-mono); font-weight:900; color:var(--hp-blue);">₹0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment & Remarks Grid -->
+            <div class="form-grid cols-3" style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--slate-200);">
+              <div class="field">
+                <label for="amount">Quotation Total Amount (₹)</label>
+                <input type="text" id="amount" value="NA" placeholder="e.g. NA or 12273" />
+              </div>
+              <div class="field">
+                <label for="paymentMode">Mode of Payment</label>
+                <select id="paymentMode">
+                  <option value="NA">NA (Under Warranty / Zero Billing)</option>
+                  <option value="UPI">UPI / Scan &amp; Pay (HDFC)</option>
+                  <option value="CASH">CASH</option>
+                  <option value="CARD">Credit / Debit Card</option>
+                  <option value="NETBANKING">Net Banking / NEFT</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="paymentRemarks">Quotation Remarks</label>
+                <select id="paymentRemarks">
+                  <option value="NA">NA</option>
+                  <option value="(CUSTOMER NOT AGREE TO TAKE REMOTE SUPPORT FOR WINDOWS RE-IMAGING & AGREES TO PAY CHARGES)">(CUSTOMER NOT AGREE TO TAKE REMOTE SUPPORT FOR WINDOWS RE-IMAGING &amp; AGREES TO PAY CHARGES)</option>
+                  <option value="Payment is 100% Advance by Cash/DD in favour of HOME COMFORTS">Payment is 100% Advance by Cash/DD in favour of HOME COMFORTS</option>
+                  <option value="Customer approved quotation via phone/email">Customer approved quotation via phone/email</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Bank Details Box -->
+            <div style="margin-top: 1.25rem; padding: 1rem; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); font-size: 0.85rem;">
+              <strong style="color:var(--hp-blue-deep); display:block; margin-bottom: 0.5rem;">🏦 ACCOUNT DETAILS FOR PAYMENT:</strong>
+              <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.5rem;">
+                <div><strong>ACCOUNT NAME:</strong> HOME COMFORTS</div>
+                <div><strong>ACCOUNT NO.:</strong> <code>50200116470920</code></div>
+                <div><strong>IFSC:</strong> <code>HDFC0009388</code></div>
+                <div><strong>BANK NAME:</strong> HDFC BANK</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Section: Important Note & Terms -->
+        <div class="panel" style="border-left: 4px solid var(--warning);">
+          <div class="panel-head">Important note &amp; Warranty Policy</div>
+          <div class="panel-body" style="font-size:0.82rem; line-height: 1.5; color: var(--slate-700); background: var(--slate-50);">
+            In case of Hard Disk failure or reinstallation of OS due to any other reasons, it may require formatting the Hard Disk. This may lead to loss of data. Hence, it is advisable for the customer to backup important files / data &amp; programs. Application software will not be installed apart from the recommended operating system (OS), including drivers and patches. Kindly refer to warranty terms and Conditions for more information. Service call document need to be submitted physically at the time of collection of device.
+          </div>
+        </div>
+
+        <!-- Section: Device Inspection Photos & Live Diagnostics Camera -->
+        <div class="panel" id="photosPanel">
+          <div class="panel-head">
+            <span>📸 Device Inspection Photos &amp; Diagnostics Camera</span>
+            <span class="badge badge-uw" id="photoCountBadge">0 Photos Attached</span>
+          </div>
+          <div class="panel-body">
+            <!-- Action Toolbar -->
+            <div class="photos-panel-toolbar">
+              <div>
+                <strong style="color:var(--slate-800); display:block; font-size:0.88rem;">Device Visual Evidence &amp; Intake Documentation</strong>
+                <small style="color:var(--slate-500);">Document scratches, damages, serial barcode, and parts with live webcam or file uploads</small>
+              </div>
+              <div class="photos-actions-group">
+                <button type="button" class="btn btn-camera-trigger" id="btnOpenCamera">
+                  📷 Open Live Camera
+                </button>
+                <button type="button" class="btn btn-outline" id="btnBrowseImages">
+                  📁 Upload Photos
+                </button>
+                <input type="file" id="photoFileInput" accept="image/*" multiple hidden />
+                <!-- Native Camera Fallback for Mobile / Tablets -->
+                <input type="file" id="mobileCameraInput" accept="image/*" capture="environment" hidden />
+                <button type="button" class="btn btn-outline" id="btnMobileCamera" title="Capture photo directly with device camera">
+                  📱 Mobile Cam
+                </button>
+              </div>
+            </div>
+
+            <!-- Interactive Photo Gallery Grid -->
+            <div class="inspection-gallery" id="inspectionGallery">
+              <div class="empty-gallery-state" id="emptyGalleryState">
+                <div class="icon">📷</div>
+                <strong style="color:var(--slate-700);">No inspection photos attached yet</strong>
+                <span>Click <strong>Open Live Camera</strong> or <strong>Upload Photos</strong> to document device condition and damages.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form actions -->
+        <div class="form-actions no-print">
+          <button type="button" class="btn btn-outline" id="btnSaveDraft">💾 Save Draft</button>
+          <button type="button" class="btn btn-primary" id="btnSaveCase">💾 Save Case &amp; Quote</button>
+          <button type="button" class="btn btn-primary" id="btnCloseCase">✅ Save &amp; Close Case</button>
+          <span class="spacer"></span>
+          <button type="button" class="btn btn-danger" id="btnCancel">Cancel</button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- Print-only document area -->
+  <div class="print-sheet" id="printArea" style="display:none;">
+    <div class="print-only" id="printContent"></div>
+  </div>
+<!-- LIVE CAMERA VIEWFINDER MODAL -->
+<div class="camera-modal" id="cameraModal" role="dialog" aria-modal="true" aria-labelledby="camModalTitle">
+  <div class="camera-dialog">
+    <div class="camera-header">
+      <h3 id="camModalTitle">
+        <span>📸 HP Care Live Diagnostic Camera</span>
+        <span class="camera-live-indicator"><span class="camera-live-dot"></span> LIVE CAM</span>
+      </h3>
+      <button type="button" class="btn-close-modal" id="btnCloseCamera" title="Close Camera">✕</button>
+    </div>
+
+    <!-- Video Stream Viewfinder -->
+    <div class="camera-viewfinder-wrap">
+      <video id="cameraVideo" class="camera-video-feed" autoplay playsinline muted></video>
+      <canvas id="cameraCanvas" style="display:none;"></canvas>
+      <div class="camera-grid-overlay"></div>
+      <div class="camera-crosshair"></div>
+      <div class="camera-flash-effect" id="cameraFlash"></div>
+    </div>
+
+    <!-- Session Photos Strip -->
+    <div class="camera-session-strip" id="cameraSessionStrip" style="display:none;"></div>
+
+    <!-- Controls -->
+    <div class="camera-controls-bar">
+      <button type="button" class="btn-camera-flip" id="btnFlipCamera" title="Switch between Front and Back cameras">
+        🔄 Switch Lens
+      </button>
+
+      <div class="shutter-btn-wrap">
+        <button type="button" class="btn-shutter" id="btnCaptureShutter" title="Take Snap / Capture Photo">
+          <div class="btn-shutter-inner"></div>
+        </button>
+      </div>
+
+      <button type="button" class="btn btn-outline btn-sm" id="btnDoneCamera" style="color:var(--white); border-color:var(--slate-600);">
+        Done (Close)
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- FULLSCREEN LIGHTBOX ZOOM MODAL -->
+<div class="lightbox-modal" id="lightboxModal" role="dialog" aria-modal="true">
+  <div class="lightbox-content">
+    <button type="button" class="lightbox-close" id="btnCloseLightbox" title="Close">✕</button>
+    <img id="lightboxImage" src="" alt="Zoomed Inspection Photo" />
+    <div class="lightbox-caption" id="lightboxCaption">HP Care Device Visual Record</div>
+  </div>
+</div>
+
+<div class="toast no-print" id="toast"></div>
+
+<!-- Datalist for Common Customer Complaints (Populated dynamically by hp.js) -->
+<datalist id="commonComplaintsList"></datalist>
+
+<script src="assets/hp.js"></script>
+<script>
+"use strict";
+if (!window.HPCare.requireAuth()) { throw new Error("redirecting"); }
+window.HPCare.bindLogout();
+window.HPCare.ready(function () {
+  var params = new URLSearchParams(window.location.search);
+  var type = params.get("type") || "Under Warranty";
+  var id = params.get("id");
+  window.HPCare.setupCase({ type: type, id: id });
+});
+</script>
+</body>
+</html>

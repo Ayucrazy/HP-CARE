@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Print Layout & A4 Preview Verification</title>
+<link rel="stylesheet" href="assets/hp.css" />
+<style>
+  @media screen {
+    body { background: #525659; padding: 20px 0; }
+    .print-page { background: white; margin: 20px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    .preview-banner { text-align: center; color: white; margin-bottom: 20px; font-family: sans-serif; font-size: 16px; font-weight: bold; }
+  }
+</style>
+</head>
+<body>
+<div class="preview-banner">🖨️ HP CARE A4 PRINT PREVIEW TEST (210mm x 297mm Exact Layout)</div>
+<div id="printArea" class="print-sheet">
+  <div id="printContent"></div>
+</div>
+<script src="assets/hp.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var sampleCase = {
+    id: "HC BPL 1918",
+    caseNo: "HC BPL 1918",
+    obligation: "Under Warranty",
+    caseType: "Under Warranty",
+    partnerName: "HOME COMFORTS",
+    branchAddress: "89 ZONE 2 M.P. NAGAR BHOPAL",
+    phone: "8962194727 / 8962524727",
+    emailId: "hpcarebhopal1@gmail.com",
+    receivingDateTime: "25-Aug-2026 08:15:00 PM",
+    purchaseDate: "10-Jan-2026",
+    customerName: "ROHIT GUPTA",
+    company: "TECH CORP",
+    mobile: "9893012345",
+    altContact: "8962194727",
+    email: "ROHIT.GUPTA@YAHOO.COM",
+    address: "89 ZONE 2 M.P. NAGAR, BHOPAL",
+    pincode: "462011",
+    model: "15s-FQ5185TU / 8H1C2PA",
+    productId: "8H1C2PA",
+    serial: "5CD3333C1Z",
+    password: "NA",
+    os: "WINDOWS 11",
+    complaint: "DISPLAY FLICKERING & HINGE HARD TO OPEN",
+    custRemarks: "Customer reported screen flicker when adjusting lid angle.",
+    resolutionSummary: "Display cable reseated, hinge lubricated & calibrated. All diagnostics passed.",
+    scratchesCondition: "Minor Hairline Scratches (Normal Wear)",
+    damagesCondition: "No Physical Damage / Intact Body",
+    accessories: ["AC Adapter / Charger", "Power Cord / AC Cable", "Laptop Carry Bag"],
+    engineer: "Danish",
+    dateOpened: "25-Aug-2026",
+    status: "LOGGED"
+  };
+
+  // Render Service Call Report preview
+  var printArea = document.getElementById("printArea");
+  var printContent = document.getElementById("printContent");
+  printArea.style.display = "block";
+
+  // Render 2 copies
+  var html = HPCare.printCSODocument(sampleCase, 2);
+});
+</script>
+</body>
+</html>

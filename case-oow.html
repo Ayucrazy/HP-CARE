@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Out of Warranty (OOW) Case Intake | HP CARE Bhopal</title>
+  <link rel="stylesheet" href="assets/hp.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- Top Corporate Navigation -->
+  <header class="topbar no-print">
+    <a class="brand" href="index.html">
+      <div class="hp-logo-wrap">
+        <img src="assets/hp-logo.png" alt="HP Logo" />
+      </div>
+      <div class="name">
+        HP CARE
+        <small>HOME COMFORTS · 89 ZONE 2 M.P. NAGAR BHOPAL</small>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="index.html">📊 Dashboard</a>
+      <a href="case-uw.html">🛡️ Under Warranty (UW)</a>
+      <a href="case-oow.html" class="active">⚙️ Out of Warranty (OOW)</a>
+      <a href="quotation.html">📑 Quotations</a>
+      <div class="user-badge" id="loggedUserBadge">
+        <span class="status-dot"></span>
+        <span id="loggedUser">Danish (Engineer)</span>
+      </div>
+      <button type="button" id="btnLogout" title="Sign out">Logout</button>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="content no-print">
+    <div class="container">
+      
+      <!-- Page Header -->
+      <div class="page-title">
+        <div>
+          <div class="badge badge-oow" style="margin-bottom:4px;">⚙️ Out of Warranty Case Intake</div>
+          <h1>HP Paid Service &amp; Inspection Intake</h1>
+          <p>Official HP Care Out of Warranty Service Desk · Sequence: <strong>HC BPL</strong></p>
+        </div>
+        <div class="actions-header">
+          <a href="index.html" class="btn btn-outline">Cancel</a>
+          <button type="button" id="btnSaveAndPrint" class="btn btn-primary" style="background:#0F172A; border-color:#0F172A; font-weight:700;">💾🖨️ Save &amp; Print</button>
+          <button type="button" id="btnPrintCSO" class="btn btn-secondary">🖨️ Print CSO Document (A4)</button>
+          <button type="button" id="btnPrintDiag" class="btn btn-outline admin-only" title="Technical Diagnostic Sheet">🔬 Technical Diagnostic</button>
+          <button type="button" id="btnSaveCase" class="btn btn-primary">💾 Save OOW Case</button>
+        </div>
+      </div>
+
+      <!-- 1. Interactive Workflow Status Timeline Stepper -->
+      <div class="panel no-print">
+        <div class="panel-head">
+          <span>Case Status Workflow Pipeline</span>
+          <small style="font-size:0.75rem; color:var(--slate-500); font-weight:normal;">Click any stage to update repair progress</small>
+        </div>
+        <div class="panel-body">
+          <ul class="workflow" id="workflow">
+            <li class="workflow-step active" data-status="LOGGED">
+              <div class="step-dot">1</div>
+              <div class="step-title">📥 LOGGED</div>
+            </li>
+            <li class="workflow-step" data-status="DIAGNOSIS">
+              <div class="step-dot">2</div>
+              <div class="step-title">🔍 DIAGNOSIS</div>
+            </li>
+            <li class="workflow-step" data-status="IN_REPAIR">
+              <div class="step-dot">3</div>
+              <div class="step-title">⚙️ IN REPAIR</div>
+            </li>
+            <li class="workflow-step" data-status="QC_PASSED">
+              <div class="step-dot">4</div>
+              <div class="step-title">✨ QC PASSED</div>
+            </li>
+            <li class="workflow-step" data-status="READY_FOR_PICKUP">
+              <div class="step-dot">5</div>
+              <div class="step-title">🚀 READY</div>
+            </li>
+            <li class="workflow-step" data-status="CLOSED">
+              <div class="step-dot">6</div>
+              <div class="step-title">✅ DELIVERED</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <form id="oowForm" autocomplete="off">
+        
+        <!-- 2. Case Identification -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Case Identification &amp; Assignment</span>
+            <span class="badge badge-oow">Paid Service</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid cols-4">
+              <div class="field code-field">
+                <label for="caseNo">CSO / Case Number <span class="req">*</span></label>
+                <input type="text" id="caseNo" readonly style="font-weight:700; color:var(--hp-blue);" />
+              </div>
+
+              <div class="field">
+                <label for="obligation">Service Obligation</label>
+                <input type="text" id="obligation" value="Out of Warranty" readonly />
+              </div>
+
+              <div class="field">
+                <label for="receivingDateTime">Receiving Date &amp; Time</label>
+                <input type="text" id="receivingDateTime" readonly />
+              </div>
+
+              <div class="field">
+                <label for="engineer">Assigned Service Engineer</label>
+                <select id="engineer">
+                  <option value="Vibhor" selected>Vibhor (Service Engineer)</option>
+                  <option value="Danish">Danish (Service Engineer)</option>
+                  <option value="Ayush">Ayush Sharma (Admin Desk)</option>
+                  <option value="Anchit">Anchit Sir (Owner / Head)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="priority">Case Priority</label>
+                <select id="priority">
+                  <option value="Low">Low Priority</option>
+                  <option value="Medium" selected>Medium (Standard Turnaround)</option>
+                  <option value="High">High (Urgent / Escalated)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="status">Workflow Status</label>
+                <select id="status">
+                  <option value="LOGGED">LOGGED (Intake)</option>
+                  <option value="IN_REPAIR">IN_REPAIR (On Bench)</option>
+                  <option value="AWAITING_APPROVAL">AWAITING_APPROVAL (Quote Shared)</option>
+                  <option value="CLOSED">CLOSED (Completed &amp; Delivered)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="partnerName">Service Partner</label>
+                <input type="text" id="partnerName" value="HOME COMFORTS" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Customer & Billing Details -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Customer &amp; Billing Details</span>
+            <span class="badge badge-oow">Customer Profile</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid cols-3">
+              <div class="field">
+                <label for="customerName">Customer Name / Contact Person <span class="req">*</span></label>
+                <input type="text" id="customerName" placeholder="e.g. ROHIT GUPTA" required />
+              </div>
+
+              <div class="field">
+                <label for="company">Company / Enterprise Name</label>
+                <input type="text" id="company" placeholder="e.g. Individual / Company" />
+              </div>
+
+              <div class="field">
+                <label for="mobile">Primary Mobile Number <span class="req">*</span></label>
+                <input type="tel" id="mobile" placeholder="e.g. 9893012345" required />
+              </div>
+
+              <div class="field">
+                <label for="altContact">Alternate Phone</label>
+                <input type="tel" id="altContact" placeholder="e.g. 8962194727" />
+              </div>
+
+              <div class="field">
+                <label for="email">Customer Email ID</label>
+                <input type="email" id="email" placeholder="e.g. ROHIT.GUPTA@YAHOO.COM" />
+              </div>
+
+              <div class="field">
+                <label for="address">Address &amp; Pincode</label>
+                <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:6px;">
+                  <input type="text" id="address" value="BHOPAL" placeholder="City / Address" />
+                  <input type="text" id="pincode" value="462016" placeholder="Pincode" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Device Specs & Technical Complaint -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Device Hardware &amp; Complaint Diagnosis</span>
+            <span class="badge badge-oow">Technical Specs</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid cols-3" style="margin-bottom:1rem;">
+              <div class="field">
+                <label for="model">Model &amp; Product No. <span class="req">*</span></label>
+                <input type="text" id="model" placeholder="e.g. 14S-DQ2606TU / 50M71PA" required />
+              </div>
+
+              <div class="field code-field">
+                <label for="serial">Serial Number (S/N) <span class="req">*</span></label>
+                <input type="text" id="serial" placeholder="e.g. 5CD2094KLL" style="text-transform:uppercase;" required />
+              </div>
+
+              <div class="field">
+                <label for="os">OS &amp; Password</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                  <input type="text" id="os" value="WINDOWS 11" />
+                  <input type="text" id="password" placeholder="Pass (9988)" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-grid cols-2">
+              <div class="field">
+                <label for="complaint">Issue Reported <span class="req">*</span> <small style="color:var(--hp-blue); font-weight:normal;">(Suggestions available on typing)</small></label>
+                <input type="text" id="complaint" list="commonComplaintsList" placeholder="Start typing reported issue (e.g. Full Windows Recovery, Cleaning & Pasting)..." required style="font-weight:600;" />
+              </div>
+
+              <div class="field">
+                <label for="resolutionSummary">Resolution Summary &amp; Engineer Remarks</label>
+                <textarea id="resolutionSummary" rows="2" placeholder="Diagnosis findings, thermal servicing, parts replaced..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. 2-Column Scratches & Damages Layout -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Physical Condition Inspection (2-Column Split)</span>
+            <span class="badge badge-oow">Visual Inspection</span>
+          </div>
+          <div class="panel-body" style="padding-top:0.5rem;">
+            <div class="condition-split-grid">
+              <div class="condition-col">
+                <div class="condition-col-header">
+                  <span class="condition-col-title">🎨 Part 1: Scratches &amp; Cosmetic Wear</span>
+                </div>
+                <div class="condition-preset-chips" id="scratchesChips">
+                  <button type="button" class="preset-chip active" data-val="Minor Hairline Scratches (Normal Wear)">👌 Minor Hairlines</button>
+                  <button type="button" class="preset-chip" data-val="No Scratches / Clean Body">✨ Clean Surface</button>
+                  <button type="button" class="preset-chip" data-val="A-Cover & Palmrest Scratches">⚠️ Cover Scratches</button>
+                  <button type="button" class="preset-chip" data-val="Deep Scratches on Base Enclosure">📋 Base Scuffs</button>
+                </div>
+                <textarea id="scratchesCondition" rows="2" placeholder="Cosmetic scratches notes..."></textarea>
+              </div>
+
+              <div class="condition-col">
+                <div class="condition-col-header">
+                  <span class="condition-col-title">💥 Part 2: Physical Damages &amp; Liquid Status</span>
+                </div>
+                <div class="condition-preset-chips" id="damagesChips">
+                  <button type="button" class="preset-chip active" data-val="No Physical Damage / Intact Body">✅ No Physical Damage</button>
+                  <button type="button" class="preset-chip" data-val="Corner Dent / Body Deformity">💥 Corner Dent</button>
+                  <button type="button" class="preset-chip" data-val="Display Hinge Broken">🔩 Hinge Broken</button>
+                  <button type="button" class="preset-chip" data-val="Liquid / Water Ingress Detected">💧 Liquid Ingress</button>
+                </div>
+                <textarea id="damagesCondition" rows="2" placeholder="Physical damages notes..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5b. Accessories Received -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Accessories Received with Device</span>
+            <span class="badge badge-oow">Custody Items</span>
+          </div>
+          <div class="panel-body">
+            <div id="accessoriesGrid" class="accessories-grid" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
+          </div>
+        </div>
+
+        <!-- 6. Live Camera & Inspection Photos -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Device Intake Inspection Photos</span>
+            <div style="display:flex; gap:8px;">
+              <button type="button" id="btnOpenCam" class="btn btn-sm btn-primary">📷 Open Live Camera</button>
+              <button type="button" id="btnMobileCam" class="btn btn-sm btn-outline">📱 Mobile Cam</button>
+              <input type="file" id="mobileCameraInput" accept="image/*" capture="environment" style="display:none;" />
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="photo-gallery-grid" id="inspectionGallery" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:12px;"></div>
+          </div>
+        </div>
+
+        <!-- 7. OOW Service Charge Box -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Service &amp; Inspection Fee</span>
+            <span class="badge badge-oow">Direct Billing (No Auto GST)</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid cols-3">
+              <div class="field">
+                <label for="amount">Total Charge (₹)</label>
+                <input type="text" id="amount" value="1000" style="font-family:var(--font-mono); font-size:1.15rem; font-weight:800; color:var(--slate-900);" placeholder="e.g. 700 / 1000 / 1180" />
+                <small style="color:var(--slate-500); font-size:0.75rem;">Enter service charge amount directly.</small>
+              </div>
+
+              <div class="field">
+                <label for="paymentMode">Payment Mode</label>
+                <select id="paymentMode">
+                  <option value="UPI" selected>UPI / QR Scan &amp; Pay</option>
+                  <option value="Cash">Cash at Counter</option>
+                  <option value="Card">Debit / Credit Card (POS)</option>
+                  <option value="Bank Transfer">NEFT / RTGS / Bank Transfer</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="paymentRemarks">Billing &amp; Payment Remarks</label>
+                <input type="text" id="paymentRemarks" value="Standard OOW Inspection &amp; Service Charge" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </main>
+</div>
+
+<!-- Live Camera Modal -->
+<div id="cameraModal" class="camera-modal no-print">
+  <div class="camera-dialog">
+    <div class="camera-header">
+      <h3>📷 Live Device Inspection Camera</h3>
+      <button type="button" id="btnCloseCam" class="btn-close-modal">✕</button>
+    </div>
+    <div class="camera-viewfinder-wrap">
+      <video id="cameraVideoFeed" class="camera-video-feed" playsinline autoplay muted></video>
+      <div class="camera-grid-overlay"></div>
+      <div class="camera-crosshair"></div>
+      <div id="cameraFlashOverlay" class="camera-flash-effect"></div>
+    </div>
+    <div class="camera-controls-bar">
+      <button type="button" id="btnFlipCam" class="btn-camera-flip">🔄 Flip Lens</button>
+      <button type="button" id="btnShutter" class="btn-shutter" title="Take Photo">📸</button>
+      <div style="width:80px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Fullscreen Lightbox Modal -->
+<div id="lightboxModal" class="lightbox-modal no-print">
+  <img id="lightboxImage" class="lightbox-image" src="" alt="Inspection Photo Zoom" />
+</div>
+
+<!-- A4 Print Sheet Container -->
+<div id="printArea" class="print-sheet" style="display:none;">
+  <div id="printContent"></div>
+</div>
+
+<!-- Datalist for Common Customer Complaints (Populated dynamically by hp.js) -->
+<datalist id="commonComplaintsList"></datalist>
+
+<script src="assets/hp.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    HPCare.init("case-oow");
+  });
+</script>
+</body>
+</html>

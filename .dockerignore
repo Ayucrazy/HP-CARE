@@ -1,0 +1,7 @@
+.git
+.gitignore
+*.md
+.idea
+.vscode
+target
+*.log

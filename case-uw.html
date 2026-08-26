@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Under Warranty (UW) Case Intake | HP CARE Bhopal</title>
+  <link rel="stylesheet" href="assets/hp.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- Top Corporate Navigation -->
+  <header class="topbar no-print">
+    <a class="brand" href="index.html">
+      <div class="hp-logo-wrap">
+        <img src="assets/hp-logo.png" alt="HP Logo" />
+      </div>
+      <div class="name">
+        HP CARE
+        <small>HOME COMFORTS · 89 ZONE 2 M.P. NAGAR BHOPAL</small>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="index.html">📊 Dashboard</a>
+      <a href="case-uw.html" class="active">🛡️ Under Warranty (UW)</a>
+      <a href="case-oow.html">⚙️ Out of Warranty (OOW)</a>
+      <a href="quotation.html">📑 Quotations</a>
+      <div class="user-badge" id="loggedUserBadge">
+        <span class="status-dot"></span>
+        <span id="loggedUser">Danish (Engineer)</span>
+      </div>
+      <button type="button" id="btnLogout" title="Sign out">Logout</button>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="content no-print">
+    <div class="container">
+      
+      <!-- Page Header -->
+      <div class="page-title">
+        <div>
+          <div class="badge badge-uw" style="margin-bottom:4px;">🛡️ Under Warranty Case Intake</div>
+          <h1>Customer Service Call &amp; Warranty RMA Intake</h1>
+          <p>Official HP Care Service Call Report &amp; Device Post-Checklist Matrix · Sequence: <strong>HC BPL</strong></p>
+        </div>
+        <div class="actions-header">
+          <a href="index.html" class="btn btn-outline">Cancel</a>
+          <button type="button" id="btnSaveAndPrint" class="btn btn-primary" style="background:#0F172A; border-color:#0F172A; font-weight:700;">💾🖨️ Save &amp; Print</button>
+          <button type="button" id="btnPrintCSO" class="btn btn-secondary">🖨️ Print CSO Document (A4)</button>
+          <button type="button" id="btnPrintSCR" class="btn btn-outline" title="Print Detailed Service Call Report (Parts &amp; Checklist)">📋 Print RMA Report</button>
+          <button type="button" id="btnPrintDiag" class="btn btn-outline admin-only" title="Technical Diagnostic Sheet">🔬 Technical Diagnostic</button>
+          <button type="button" id="btnSaveCase" class="btn btn-primary">💾 Save UW Case</button>
+          <button type="button" id="btnCloseCase" class="btn btn-success">✅ Save &amp; Close Case</button>
+        </div>
+      </div>
+
+      <!-- 1. Interactive Workflow Status Timeline Stepper -->
+      <div class="panel no-print">
+        <div class="panel-head">
+          <span>Case Status Workflow Pipeline</span>
+          <small style="font-size:0.75rem; color:var(--slate-500); font-weight:normal;">Click any stage to update repair progress</small>
+        </div>
+        <div class="panel-body">
+          <ul class="workflow" id="workflow">
+            <li class="workflow-step active" data-status="LOGGED">
+              <div class="step-dot">1</div>
+              <div class="step-title">📥 LOGGED</div>
+            </li>
+            <li class="workflow-step" data-status="DIAGNOSIS">
+              <div class="step-dot">2</div>
+              <div class="step-title">🔍 DIAGNOSIS</div>
+            </li>
+            <li class="workflow-step" data-status="IN_REPAIR">
+              <div class="step-dot">3</div>
+              <div class="step-title">⚙️ IN REPAIR</div>
+            </li>
+            <li class="workflow-step" data-status="QC_PASSED">
+              <div class="step-dot">4</div>
+              <div class="step-title">✨ QC PASSED</div>
+            </li>
+            <li class="workflow-step" data-status="READY_FOR_PICKUP">
+              <div class="step-dot">5</div>
+              <div class="step-title">🚀 READY</div>
+            </li>
+            <li class="workflow-step" data-status="CLOSED">
+              <div class="step-dot">6</div>
+              <div class="step-title">✅ DELIVERED</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <form id="uwForm" autocomplete="off">
+        
+        <!-- 2. Case Identification & Warranty Verification -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Case Identification &amp; Warranty Verification</span>
+            <span class="badge badge-uw">Official Header</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid cols-4">
+              <div class="field code-field">
+                <label for="caseNo">CSO / Case Number <span class="req">*</span></label>
+                <input type="text" id="caseNo" readonly style="font-weight:700; color:var(--hp-blue);" />
+              </div>
+
+              <div class="field">
+                <label for="obligation">Service Obligation</label>
+                <input type="text" id="obligation" value="Under Warranty" readonly />
+              </div>
+
+              <div class="field">
+                <label for="purchaseDate">Purchase / Invoice Date <span class="req">* (COMPULSORY FOR UW)</span></label>
+                <input type="text" id="purchaseDate" placeholder="e.g. 06-Mar-26" style="border-color:#3B82F6; font-weight:600;" required />
+              </div>
+
+              <div class="field">
+                <label for="receivingDateTime">Receiving Date &amp; Time</label>
+                <input type="text" id="receivingDateTime" readonly />
+              </div>
+
+              <div class="field">
+                <label for="engineer">Assigned Service Engineer</label>
+                <select id="engineer">
+                  <option value="Vibhor" selected>Vibhor (Service Engineer)</option>
+                  <option value="Danish">Danish (Service Engineer)</option>
+                  <option value="Ayush">Ayush Sharma (Admin Desk)</option>
+                  <option value="Anchit">Anchit Sir (Owner / Head)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="priority">Case Priority</label>
+                <select id="priority">
+                  <option value="Low">Low Priority</option>
+                  <option value="Medium" selected>Medium (Standard Turnaround)</option>
+                  <option value="High">High (Urgent / Escalated)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="status">Workflow Status</label>
+                <select id="status">
+                  <option value="LOGGED">LOGGED (Intake)</option>
+                  <option value="IN_REPAIR">IN_REPAIR (On Bench)</option>
+                  <option value="AWAITING_APPROVAL">AWAITING_APPROVAL (Parts / Approval)</option>
+                  <option value="CLOSED">CLOSED (Completed &amp; Delivered)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="partnerName">Service Partner</label>
+                <input type="text" id="partnerName" value="HOME COMFORTS" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Customer & Contact Information -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Customer &amp; Contact Information</span>
+            <span class="badge badge-uw">Client Profile</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid cols-3">
+              <div class="field">
+                <label for="customerName">Customer Name / Contact Person <span class="req">*</span></label>
+                <input type="text" id="customerName" placeholder="e.g. VISHAL" required />
+              </div>
+
+              <div class="field">
+                <label for="company">Company / Enterprise Name</label>
+                <input type="text" id="company" placeholder="e.g. VISHAL or Individual" />
+              </div>
+
+              <div class="field">
+                <label for="mobile">Primary Contact Number <span class="req">*</span></label>
+                <input type="tel" id="mobile" placeholder="e.g. 9015561917" required />
+              </div>
+
+              <div class="field">
+                <label for="altContact">Alternate Contact No.</label>
+                <input type="tel" id="altContact" placeholder="e.g. 8962194727" />
+              </div>
+
+              <div class="field">
+                <label for="email">Customer Email ID</label>
+                <input type="email" id="email" placeholder="e.g. OFFICIALVISHALKUMAR8@GMAIL.COM" />
+              </div>
+
+              <div class="field">
+                <label for="address">Address &amp; Pincode</label>
+                <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:6px;">
+                  <input type="text" id="address" value="BHOPAL" placeholder="City / Address" />
+                  <input type="text" id="pincode" value="462022" placeholder="Pincode" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Device Hardware & Technical Complaint -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Device Hardware &amp; Complaint Diagnosis</span>
+            <span class="badge badge-uw">Hardware Specs</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid cols-3" style="margin-bottom:1rem;">
+              <div class="field">
+                <label for="model">Model No &amp; Product No <span class="req">*</span></label>
+                <input type="text" id="model" placeholder="e.g. 16-S0095AX / 8R1E6PA" required />
+              </div>
+
+              <div class="field code-field">
+                <label for="serial">Serial Number (S/N) <span class="req">*</span></label>
+                <input type="text" id="serial" placeholder="e.g. CND33606C5" style="text-transform:uppercase;" required />
+              </div>
+
+              <div class="field">
+                <label for="os">Operating System (OS)</label>
+                <input type="text" id="os" value="WINDOWS 11" />
+              </div>
+            </div>
+
+            <div class="form-grid cols-2">
+              <div class="field">
+                <label for="complaint">Issue Reported by Customer <span class="req">*</span> <small style="color:var(--hp-blue); font-weight:normal;">(Suggestions available on typing)</small></label>
+                <input type="text" id="complaint" list="commonComplaintsList" placeholder="Start typing reported issue (e.g. Full Windows Recovery, Cleaning & Pasting)..." required style="font-weight:600;" />
+              </div>
+
+              <div class="field">
+                <label for="resolutionSummary">Resolution Summary &amp; Engineer Diagnosis</label>
+                <textarea id="resolutionSummary" rows="2" placeholder="Diagnosis findings, replaced parts, testing observations..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. 2-Column Scratches & Damages Layout -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Physical Condition Inspection (2-Column Split)</span>
+            <span class="badge badge-uw">Intake Evidence</span>
+          </div>
+          <div class="panel-body" style="padding-top:0.5rem;">
+            <div class="condition-split-grid">
+              <div class="condition-col">
+                <div class="condition-col-header">
+                  <span class="condition-col-title">🎨 Part 1: Scratches &amp; Cosmetic Wear</span>
+                </div>
+                <div class="condition-preset-chips" id="scratchesChips">
+                  <button type="button" class="preset-chip active" data-val="Minor Hairline Scratches (Normal Wear)">👌 Minor Hairlines</button>
+                  <button type="button" class="preset-chip" data-val="No Scratches / Clean Surface">✨ No Scratches</button>
+                  <button type="button" class="preset-chip" data-val="Top A-Cover Scratched">⚠️ A-Cover Scratched</button>
+                  <button type="button" class="preset-chip" data-val="Palmrest & Keyboard Wear">⌨️ Palmrest Wear</button>
+                </div>
+                <textarea id="scratchesCondition" rows="2" placeholder="Cosmetic wear notes..."></textarea>
+              </div>
+
+              <div class="condition-col">
+                <div class="condition-col-header">
+                  <span class="condition-col-title">💥 Part 2: Physical Damages &amp; Liquid Status</span>
+                </div>
+                <div class="condition-preset-chips" id="damagesChips">
+                  <button type="button" class="preset-chip active" data-val="No Physical Damage / Intact Body">✅ No Physical Damage</button>
+                  <button type="button" class="preset-chip" data-val="Corner Dent / Body Deformity">💥 Corner Dent</button>
+                  <button type="button" class="preset-chip" data-val="Display Hinge Broken">🔩 Hinge Broken</button>
+                  <button type="button" class="preset-chip" data-val="Liquid / Water Ingress Observed">💧 Liquid Ingress</button>
+                </div>
+                <textarea id="damagesCondition" rows="2" placeholder="Damage or liquid ingress notes..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5b. Accessories Received -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Accessories Received with Device</span>
+            <span class="badge badge-uw">Custody Items</span>
+          </div>
+          <div class="panel-body">
+            <div id="accessoriesGrid" class="accessories-grid" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
+          </div>
+        </div>
+
+        <!-- 6. Live Camera & Inspection Photos -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Device Intake Inspection Photos</span>
+            <div style="display:flex; gap:8px;">
+              <button type="button" id="btnOpenCam" class="btn btn-sm btn-primary">📷 Open Live Camera</button>
+              <button type="button" id="btnMobileCam" class="btn btn-sm btn-outline">📱 Mobile Cam</button>
+              <input type="file" id="mobileCameraInput" accept="image/*" capture="environment" style="display:none;" />
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="photo-gallery-grid" id="inspectionGallery" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:12px;"></div>
+          </div>
+        </div>
+
+        <!-- 7. Parts Used / Returned Details Table (RMA) -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Part Used / Returned Details (Warranty RMA)</span>
+            <button type="button" id="btnAddPartUsed" class="btn btn-sm btn-outline">+ Add Replacement Part</button>
+          </div>
+          <div class="panel-body" style="padding:0;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>SO No./Req ID</th>
+                  <th>Part No.</th>
+                  <th>Part Description</th>
+                  <th>Removed Part CT#</th>
+                  <th>Installed Part CT#</th>
+                  <th style="width:130px;">Status</th>
+                  <th style="width:40px;"></th>
+                </tr>
+              </thead>
+              <tbody id="partsUsedBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 8. Post-Checklist Matrix (PDF Quality Assurance) -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Device Quality Assurance &amp; Post-Checklist</span>
+            <span class="badge badge-uw">20 Verification Checks</span>
+          </div>
+          <div class="panel-body">
+            <div id="postChecklistGrid" style="display:flex; flex-direction:column; gap:4px;"></div>
+          </div>
+        </div>
+
+        <!-- 9. Part Dispatch & Delivery Challan Details (Replaces Timings) -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Part Dispatch &amp; Delivery Tracking</span>
+            <span class="badge badge-uw">Logistics &amp; RMA</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid cols-3">
+              <div class="field code-field">
+                <label for="dcNo">DC Number (Delivery Challan)</label>
+                <input type="text" id="dcNo" placeholder="e.g. DC-2026-0891" />
+              </div>
+              <div class="field code-field">
+                <label for="doteeNo">DOTEE Number / RMA Ref</label>
+                <input type="text" id="doteeNo" placeholder="e.g. DOTEE-99124A" />
+              </div>
+              <div class="field">
+                <label for="dispatchDate">Part Dispatch Date (From Our End)</label>
+                <input type="text" id="dispatchDate" placeholder="e.g. 22-Aug-2026" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10. Payment & Billing Details (Optional / UW Charge Support) -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Payment &amp; Billing Details</span>
+            <span class="badge badge-uw">Direct Amount (No Auto GST)</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid cols-3">
+              <div class="field">
+                <label for="amount">Total Charge / Amount (₹)</label>
+                <input type="text" id="amount" value="NA" placeholder="e.g. NA or 700 / 1000" style="font-family:var(--font-mono); font-weight:700; font-size:1.1rem; color:var(--slate-900);" />
+                <small style="color:var(--slate-500); font-size:0.75rem;">Enter 'NA' for free warranty or custom charge directly.</small>
+              </div>
+
+              <div class="field">
+                <label for="paymentMode">Payment Mode</label>
+                <select id="paymentMode">
+                  <option value="NA" selected>NA (Under Warranty / Zero Billing)</option>
+                  <option value="UPI">UPI / QR Scan &amp; Pay</option>
+                  <option value="Cash">Cash at Counter</option>
+                  <option value="Card">Debit / Credit Card</option>
+                  <option value="Bank Transfer">NEFT / RTGS / Bank Transfer</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="paymentRemarks">Billing &amp; Payment Remarks</label>
+                <input type="text" id="paymentRemarks" list="uwRemarksList" value="NA" placeholder="Select or type remarks..." />
+                <datalist id="uwRemarksList">
+                  <option value="NA">NA</option>
+                  <option value="(CUSTOMER NOT AGREE TO TAKE REMOTE SUPPORT FOR WINDOWS RE-IMAGING & AGREES TO PAY CHARGES)">(CUSTOMER NOT AGREE TO TAKE REMOTE SUPPORT FOR WINDOWS RE-IMAGING &amp; AGREES TO PAY CHARGES)</option>
+                  <option value="Under Warranty Repair - Free">Under Warranty Repair - Free</option>
+                  <option value="Customer requested paid software/hardware support">Customer requested paid software/hardware support</option>
+                </datalist>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10. Official Terms & Conditions and Customer Data Protection -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Official Warranty Service Terms &amp; Data Protection Notice</span>
+            <span class="badge badge-uw">Standard Clauses (a–i)</span>
+          </div>
+          <div class="panel-body" style="font-size:0.82rem; color:var(--slate-600); line-height:1.6;">
+            <p style="margin-bottom:6px;"><strong>a.</strong> The terms and conditions as contained in the product warranty statement or additional CarePAQ applicable to the particular model shall be applicable for the repairs relating to the same.</p>
+            <p style="margin-bottom:6px;"><strong>b.</strong> In case of units not covered under warranty, the customers shall fill-in the Quotation Acceptance form in token of acceptance of the quotation offered by HP.</p>
+            <p style="margin-bottom:6px;"><strong>c.</strong> HP India Sales Private Limited Reserves the right to dispose off any equipment which is not claimed by the customer from the date of receipt of this CSO form/Quotation acceptance form in case of units not covered under warranty. In such an event, the customer acknowledges that he/she shall have no claim against HP in respect of such equipment, which is disposed off by HP. Further demurrage charges shall be applicable on the units @ Rs. 500/- per month if the machine is not collected from HP Care within 1 month from the date of receipt of this CSO form/Last Quotation Acceptance Form in case of units not covered under warranty. Demurrage charges will not be applicable if the delay is due to non-availability of the spare parts at HP’s end.</p>
+            <p style="margin-bottom:6px;"><strong>d.</strong> Please verify if all the items including accessories of the machine that is handed over to HP, are listed in the material receipt.</p>
+            <p style="margin-bottom:6px;"><strong>e.</strong> Force Majeure: HP shall not be liable for performance delays or for non-performance due to fire, floods power acts of Gods, acts of the public enemy wars, insurrection, riots, strikes, lockouts, sabotage and law, statute or ordinance order action or regulations of the government or any agencies thereof or any local authority or any compliance therewith or any other causes, contingencies, or circumstances similar to the above. HP shall use all reasonable endeavors to minimize any such delay upon cessation of the event giving rise to the delay; HP shall in so far as may be practicable under the circumstance complete performance of its obligations hereunder. Notwithstanding the foregoing if any of the above mentioned events precludes HP from meeting any or all of its obligations hereunder for a period of more than 3 months from the date of occurrence of such act, HP shall intimate the customer of the same.</p>
+            <p style="margin-bottom:6px;"><strong>f.</strong> Please notify HP of any discrepancy with the repaired unit while taking delivery.</p>
+            <p style="margin-bottom:6px;"><strong>g.</strong> All correspondence will be directed to the customer at the address indicated on the form. The Customer shall inform HP immediately in event of any change in the address or telephone as mentioned in this form.</p>
+            <p style="margin-bottom:6px;"><strong>h.</strong> Inspection Service charges will be applicable in case if the product is not covered under warranty/AMC/Care PAQ.</p>
+            <p style="margin-bottom:8px;"><strong>i.</strong> In case of Hard Disk failure or reinstallation of OS due to any other reasons, it may require formatting the Hard Disk. This may lead to loss of data. Hence, it is advisable for the customer to backup important files/data &amp; programs. Application software will not be installed apart from the recommended operating system (OS), including drivers and patches. Kindly refer to warranty terms and conditions for more information.</p>
+            <div style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:6px; padding:8px 12px; font-weight:700; color:#1E40AF; font-size:0.8rem;">
+              🔒 Note: We are committed to enable security &amp; protection of customer data and under no circumstances can we copy, read, erase or use customer data without the written consent of the customer.
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </main>
+</div>
+
+<!-- Live Camera Modal -->
+<div id="cameraModal" class="camera-modal no-print">
+  <div class="camera-dialog">
+    <div class="camera-header">
+      <h3>📷 Live Device Inspection Camera</h3>
+      <button type="button" id="btnCloseCam" class="btn-close-modal">✕</button>
+    </div>
+    <div class="camera-viewfinder-wrap">
+      <video id="cameraVideoFeed" class="camera-video-feed" playsinline autoplay muted></video>
+      <div class="camera-grid-overlay"></div>
+      <div class="camera-crosshair"></div>
+      <div id="cameraFlashOverlay" class="camera-flash-effect"></div>
+    </div>
+    <div class="camera-controls-bar">
+      <button type="button" id="btnFlipCam" class="btn-camera-flip">🔄 Flip Lens</button>
+      <button type="button" id="btnShutter" class="btn-shutter" title="Take Photo">📸</button>
+      <div style="width:80px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Fullscreen Lightbox Modal -->
+<div id="lightboxModal" class="lightbox-modal no-print">
+  <img id="lightboxImage" class="lightbox-image" src="" alt="Inspection Photo Zoom" />
+</div>
+
+<!-- A4 Print Sheet Container -->
+<div id="printArea" class="print-sheet" style="display:none;">
+  <div id="printContent"></div>
+</div>
+
+<!-- Datalist for Common Customer Complaints (Populated dynamically by hp.js) -->
+<datalist id="commonComplaintsList"></datalist>
+
+<script src="assets/hp.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    HPCare.init("case-uw");
+  });
+</script>
+</body>
+</html>

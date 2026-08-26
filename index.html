@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Service Desk Dashboard | HP CARE Bhopal</title>
+  <meta name="description" content="HP CARE Bhopal service desk dashboard — HOME COMFORTS case tracking, KPIs, and CSO workflow." />
+  <link rel="stylesheet" href="assets/hp.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- Top Corporate Navigation -->
+  <header class="topbar no-print">
+    <a class="brand" href="index.html">
+      <div class="hp-logo-wrap">
+        <img src="assets/hp-logo.png" alt="HP Logo" />
+      </div>
+      <div class="name">
+        HP CARE
+        <small>HOME COMFORTS · 89 ZONE 2 M.P. NAGAR BHOPAL</small>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="index.html" class="active" aria-current="page">📊 Dashboard</a>
+      <a href="case-uw.html">🛡️ + New UW Case</a>
+      <a href="case-oow.html">⚙️ + New OOW Case</a>
+      <a href="quotation.html">📑 + New Quotation</a>
+      <div class="user-badge" id="loggedUserBadge">
+        <span class="status-dot"></span>
+        <span id="loggedUser">Danish (Engineer)</span>
+      </div>
+      <button type="button" id="btnLogout" title="Sign out of Service Desk">Logout</button>
+    </nav>
+  </header>
+
+  <!-- Main Dashboard Content -->
+  <main class="content no-print">
+    <div class="container">
+      
+      <!-- Page Header -->
+      <div class="page-title">
+        <div>
+          <h1>HP CARE Authorised Service Desk Dashboard</h1>
+          <p>Partner: HOME COMFORTS · 89 ZONE 2 M.P. NAGAR BHOPAL · Helpline: 8962194727 / 8962524727 · Sequence starts at <strong>HC BPL 1800</strong></p>
+        </div>
+        <div class="actions-header">
+          <a href="case-uw.html" class="btn btn-primary" style="background:#0076CE; border-color:#0076CE;">🛡️ + New UW Case</a>
+          <a href="case-oow.html" class="btn btn-secondary" style="background:#F59E0B; border-color:#D97706; color:#FFF;">⚙️ + New OOW Case</a>
+          <a href="quotation.html" class="btn btn-primary" style="background:#0F172A; border-color:#0F172A;">📑 + New Quotation</a>
+          <button id="btnResetDb" class="btn btn-outline admin-only" title="Reset all records to factory baseline">🔄 Reset Records</button>
+        </div>
+      </div>
+
+      <!-- KPI Statistics Counters -->
+      <div class="kpi-grid">
+        <div class="kpi kpi-open">
+          <div class="num" id="kpiOpen">0</div>
+          <div class="lbl">Open / Logged <span>📥</span></div>
+        </div>
+        <div class="kpi kpi-inprog">
+          <div class="num" id="kpiInProg">0</div>
+          <div class="lbl">Under Warranty (UW) <span>🛡️</span></div>
+        </div>
+        <div class="kpi kpi-parts">
+          <div class="num" id="kpiParts">0</div>
+          <div class="lbl">Out of Warranty (OOW) <span>⚙️</span></div>
+        </div>
+        <div class="kpi kpi-ready">
+          <div class="num" id="kpiReady">0</div>
+          <div class="lbl">Quotations <span>📑</span></div>
+        </div>
+        <div class="kpi kpi-closed">
+          <div class="num" id="kpiClosed">0</div>
+          <div class="lbl">Delivered &amp; Closed <span>✅</span></div>
+        </div>
+        <div class="kpi kpi-today">
+          <div class="num" id="kpiToday">0</div>
+          <div class="lbl">Total Registered Cases <span>📋</span></div>
+        </div>
+      </div>
+
+      <!-- Follow-up and Call Reminders Banner Container -->
+      <div id="dashboardReminders" style="display:none;"></div>
+
+      <!-- Filter Tabs & Quick Action Buttons -->
+      <div class="case-buttons">
+        <button type="button" class="case-btn primary filter-tab active" data-obligation="">All Cases</button>
+        <button type="button" class="case-btn filter-tab" data-obligation="Under Warranty">🛡️ Under Warranty (UW)</button>
+        <button type="button" class="case-btn filter-tab" data-obligation="Out of Warranty">⚙️ Out of Warranty (OOW)</button>
+        <button type="button" class="case-btn filter-tab" data-obligation="Quotation">📑 Quotations</button>
+      </div>
+
+      <!-- Toolbar: Live Search + Multi Filters -->
+      <div class="toolbar-row">
+        <input type="text" id="searchBox" class="grow" placeholder="🔍 Search by Case No (HC BPL 1803), Customer Name, Mobile, Serial No (CND33606C5), Model..." autocomplete="off" />
+        <select id="filterType" title="Filter by warranty obligation" aria-label="Filter by warranty obligation">
+          <option value="">All Warranty Obligations</option>
+          <option value="Under Warranty">Under Warranty (UW)</option>
+          <option value="Out of Warranty">Out of Warranty (OOW)</option>
+          <option value="Quotation">Quotation Acceptance</option>
+        </select>
+        <select id="filterStatus" title="Filter by workflow status" aria-label="Filter by workflow status">
+          <option value="">All Workflow Statuses</option>
+          <option value="LOGGED">LOGGED (Intake)</option>
+          <option value="IN_REPAIR">IN_REPAIR (On Bench)</option>
+          <option value="AWAITING_APPROVAL">AWAITING_APPROVAL (Quote Shared)</option>
+          <option value="CLOSED">CLOSED (Completed &amp; Delivered)</option>
+        </select>
+        <span id="filterCount" style="font-size:0.85rem; font-weight:700; color:var(--hp-blue);">0 Cases Loaded</span>
+      </div>
+
+      <!-- Case Tracking Table Panel -->
+      <div class="panel">
+        <div class="panel-head">
+          <span>Active CSO Service Cases (Customer Service Orders)</span>
+          <span class="badge badge-uw">Live Database</span>
+        </div>
+        <div class="panel-body" style="padding: 0;">
+          <div class="table-wrap">
+            <table class="data-table" id="caseTable">
+              <thead>
+                <tr>
+                  <th style="width:130px;">Case No.</th>
+                  <th>Customer / Company</th>
+                  <th>Contact No</th>
+                  <th>Model &amp; Product No</th>
+                  <th>Serial No. (S/N)</th>
+                  <th style="width:130px;">Obligation</th>
+                  <th style="width:120px;">Workflow Status</th>
+                  <th>Engineer</th>
+                  <th>Receiving Date &amp; Time</th>
+                  <th style="width:230px; text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="caseTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Owner Security Console & Connected Clients Log (Exclusive for Anchit Sir) -->
+      <div id="ownerSecurityConsole" class="panel owner-only" style="display:none; border-color:#3B82F6;">
+        <div class="panel-head" style="background:#0F172A; color:#FFF;">
+          <span style="color:#FFF; display:flex; align-items:center; gap:8px;">🔑 Owner Security Console &amp; Connected Devices Log</span>
+          <span style="font-size:0.75rem; background:rgba(255,255,255,0.15); padding:3px 8px; border-radius:4px;">Restricted to Anchit Sir</span>
+        </div>
+        <div class="panel-body">
+          <div style="display:grid; grid-template-columns:1fr 2fr; gap:16px; margin-bottom:1rem;">
+            <div style="background:var(--slate-50); padding:12px; border-radius:8px; border:1px solid var(--slate-200);">
+              <div style="font-size:0.8rem; color:var(--slate-500); font-weight:700;">MASTER API KEY</div>
+              <div id="ownerApiKey" style="font-family:var(--font-mono); font-size:0.95rem; font-weight:800; color:var(--hp-blue); margin:4px 0 8px;">HP-BPL-MASTER-KEY</div>
+              <p style="font-size:0.75rem; color:var(--slate-600); margin:0;">Use this key to authenticate external microservices, backup tools, or remote diagnostics.</p>
+            </div>
+            <div style="background:var(--slate-50); padding:12px; border-radius:8px; border:1px solid var(--slate-200);">
+              <div style="font-size:0.8rem; color:var(--slate-500); font-weight:700;">LOCAL NETWORK &amp; WORKSHOP CONNECTIVITY</div>
+              <div style="font-size:0.85rem; color:var(--slate-700); margin-top:4px;">
+                Other service engineers on the workshop Wi-Fi / LAN can connect simultaneously using:
+                <div style="font-family:var(--font-mono); font-weight:700; color:#10B981; margin-top:4px;">👉 http://192.168.1.100:8080 (or your machine's IP)</div>
+              </div>
+            </div>
+          </div>
+
+          <h4 style="font-size:0.85rem; margin-bottom:8px;">Live Connected Client Sessions</h4>
+          <table class="data-table" style="font-size:0.8rem;">
+            <thead>
+              <tr>
+                <th>Client IP</th>
+                <th>User / Engineer</th>
+                <th>Device / Browser</th>
+                <th>Status</th>
+                <th>Last Active</th>
+              </tr>
+            </thead>
+            <tbody id="connectedClientsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- A4 Print Sheet Container -->
+<div id="printArea" class="print-sheet" style="display:none;">
+  <div id="printContent"></div>
+</div>
+
+<script src="assets/hp.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    HPCare.init("dashboard");
+  });
+</script>
+</body>
+</html>

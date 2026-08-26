@@ -1,0 +1,22 @@
+# OS & IDE Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.user
+
+# Java & Python build artifacts
+*.class
+*.pyc
+__pycache__/
+target/
+.mvn/
+*.log
+
+# Sensitive environment variables
+.env
+.env.local
+
+# Temporary database backups & uploads in test
+uploads/temp_*

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quotation &amp; Performa Invoice | HP CARE Bhopal</title>
+  <link rel="stylesheet" href="assets/hp.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- Top Corporate Navigation -->
+  <header class="topbar no-print">
+    <a class="brand" href="index.html">
+      <div class="hp-logo-wrap">
+        <img src="assets/hp-logo.png" alt="HP Logo" />
+      </div>
+      <div class="name">
+        HP CARE
+        <small>HOME COMFORTS · 89 ZONE 2 M.P. NAGAR BHOPAL</small>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="index.html">📊 Dashboard</a>
+      <a href="case-uw.html">🛡️ Under Warranty (UW)</a>
+      <a href="case-oow.html">⚙️ Out of Warranty (OOW)</a>
+      <a href="quotation.html" class="active">📑 Quotations</a>
+      <div class="user-badge" id="loggedUserBadge">
+        <span class="status-dot"></span>
+        <span id="loggedUser">Danish (Engineer)</span>
+      </div>
+      <button type="button" id="btnLogout" title="Sign out">Logout</button>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="content no-print">
+    <div class="container">
+      
+      <!-- Page Header -->
+      <div class="page-title">
+        <div>
+          <div class="badge badge-quote" style="margin-bottom:4px;">📑 Official Quotation Desk</div>
+          <h1>HP Official Quotation / Performa Invoice Generator</h1>
+          <p>Partner: HOME COMFORTS · 89 Zone 2 M.P. Nagar Bhopal · GSTIN: <strong>23ABCPA4215G1ZJ</strong> · PAN: <strong>ABCPA4215G</strong></p>
+        </div>
+        <div class="actions-header">
+          <a href="index.html" class="btn btn-outline">Cancel</a>
+          <button type="button" id="btnSaveAndPrint" class="btn btn-primary" style="background:#0F172A; border-color:#0F172A; font-weight:700;">💾🖨️ Save &amp; Print</button>
+          <button type="button" id="btnPrintQuote" class="btn btn-primary" style="background:#0076CE; border-color:#0076CE;">📑 Print Official Quotation / Performa Invoice (A4)</button>
+          <button type="button" id="btnSaveQuote" class="btn btn-success">💾 Save Quotation</button>
+        </div>
+      </div>
+
+      <form id="quoteForm" autocomplete="off">
+        
+        <!-- 1. Quotation Meta & Customer Info -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Quotation &amp; Customer Information</span>
+            <span class="badge badge-quote">Official Invoice Header</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid cols-3">
+              <div class="field code-field">
+                <label for="quoteNo">QUOTATION NO. <span class="req">*</span></label>
+                <input type="text" id="quoteNo" readonly style="font-weight:800; color:var(--hp-blue);" />
+              </div>
+
+              <div class="field">
+                <label for="quoteDate">QUOTATION DATE <span class="req">*</span></label>
+                <input type="text" id="quoteDate" />
+              </div>
+
+              <div class="field">
+                <label for="customerName">Customer Name <span class="req">*</span></label>
+                <input type="text" id="customerName" placeholder="e.g. ROHIT GUPTA / AKSHAT" required />
+              </div>
+
+              <div class="field">
+                <label for="mobile">Customer Contact <span class="req">*</span></label>
+                <input type="text" id="mobile" placeholder="e.g. 9826012345" required />
+              </div>
+
+              <div class="field">
+                <label for="email">Customer Mail ID</label>
+                <input type="email" id="email" placeholder="e.g. customer@gmail.com" />
+              </div>
+
+              <div class="field">
+                <label for="address">Customer Address</label>
+                <input type="text" id="address" value="BHOPAL ( M.P )" placeholder="Address" />
+              </div>
+
+              <div class="field">
+                <label for="model">Product Name (Model) <span class="req">*</span></label>
+                <input type="text" id="model" placeholder="e.g. 15S-FQ5185TU" required />
+              </div>
+
+              <div class="field code-field">
+                <label for="serial">Serial No. (S/N) <span class="req">*</span></label>
+                <input type="text" id="serial" placeholder="e.g. 5CD3333C1Z" style="text-transform:uppercase;" required />
+              </div>
+
+              <div class="field code-field">
+                <label for="productId">Part No. (Product ID)</label>
+                <input type="text" id="productId" placeholder="e.g. 7Q6Z7PA" />
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:0.75rem;">
+              <label for="complaint">Description / Customer Requirement <small style="color:var(--hp-blue); font-weight:normal;">(Suggestions available on typing)</small></label>
+              <input type="text" id="complaint" list="commonComplaintsList" placeholder="e.g. Customer requested official quotation / select common problem..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Itemized Spare Parts & Labor Calculation -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Itemized Spare Parts &amp; Labor Charges (18% GST Engine)</span>
+            <button type="button" id="btnAddPart" class="btn btn-sm btn-outline">+ Add Item / Labor</button>
+          </div>
+          <div class="panel-body" style="padding:0;">
+            <table class="parts-table">
+              <thead>
+                <tr>
+                  <th style="width:200px;">Part No.</th>
+                  <th>Description</th>
+                  <th style="width:130px; text-align:right;">Rate (₹)</th>
+                  <th style="width:110px; text-align:right;">GST (18%)</th>
+                  <th style="width:130px; text-align:right;">Line Amount (₹)</th>
+                  <th style="width:40px;"></th>
+                </tr>
+              </thead>
+              <tbody id="partsTableBody"></tbody>
+            </table>
+
+            <div class="parts-summary-box" style="padding:1rem;">
+              <div class="parts-summary">
+                <div class="row">
+                  <span>Net Amount (Excl. GST):</span>
+                  <strong id="quoteNetTotal" style="font-family:var(--font-mono);">₹0.00</strong>
+                </div>
+                <div class="row">
+                  <span>Total GST (18%):</span>
+                  <strong id="quoteGstTotal" style="font-family:var(--font-mono);">₹0.00</strong>
+                </div>
+                <div class="row total">
+                  <span>GRAND TOTAL:</span>
+                  <span id="quoteGrandTotal" style="font-family:var(--font-mono); color:var(--hp-blue);">₹0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Account & Payment Details -->
+        <div class="panel">
+          <div class="panel-head">
+            <span>Official Payment Bank Details &amp; QR Pay</span>
+            <span class="badge badge-quote">HDFC Bank</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid cols-3">
+              <div>
+                <div style="font-size:0.8rem; color:var(--slate-500); font-weight:600;">ACCOUNT NAME</div>
+                <strong style="font-size:0.95rem;">HOME COMFORTS</strong>
+              </div>
+              <div>
+                <div style="font-size:0.8rem; color:var(--slate-500); font-weight:600;">ACCOUNT NO.</div>
+                <strong style="font-size:0.95rem; font-family:var(--font-mono);">50200116470920</strong>
+              </div>
+              <div>
+                <div style="font-size:0.8rem; color:var(--slate-500); font-weight:600;">IFSC &amp; BANK</div>
+                <strong style="font-size:0.95rem; font-family:var(--font-mono);">HDFC0009388 (HDFC BANK)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </main>
+</div>
+
+<!-- A4 Print Sheet Container -->
+<div id="printArea" class="print-sheet" style="display:none;">
+  <div id="printContent"></div>
+</div>
+
+<!-- Datalist for Common Customer Complaints (Populated dynamically by hp.js) -->
+<datalist id="commonComplaintsList"></datalist>
+
+<script src="assets/hp.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    HPCare.init("quotation");
+  });
+</script>
+</body>
+</html>
